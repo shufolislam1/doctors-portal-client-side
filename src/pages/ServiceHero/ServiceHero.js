@@ -10,7 +10,7 @@ const ServiceHero = () => {
                     <h2 class="card-title">New album is released!</h2>
                     <p>Click the button to listen on Spotiwhy app.</p>
                     <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Listen</button>
+                    <button class="btn btn-primary bg-gradient-to-r from-secondary to-primary">Get Started</button>
                     </div>
                 </div>
             </div>
