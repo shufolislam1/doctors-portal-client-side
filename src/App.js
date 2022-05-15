@@ -6,6 +6,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Header from './pages/Header/Header';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
 import Reviews from './pages/Reviews/Reviews';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path='/appoinment2' element={<Appoinment2></Appoinment2>}></Route>
         <Route path='/reviews' element={<Reviews></Reviews>}></Route>
         <Route path='/contactUs' element={<ContactUs></ContactUs>}></Route>
+        <Route path='/register' element={<Register></Register>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
       </Routes>
     </div>
