@@ -1,10 +1,29 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    const [updateProfile, updating, updteError] = useUpdateProfile(auth);
+    const navigate = useNavigate()
+
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const onSubmit = data => console.log(data);
+    const onSubmit = async data => {
+        console.log(data)
+        await signInWithEmailAndPassword(data.email, data.Password)
+        await updateProfile({ displayName:data.name });
+        navigate('/appoinment')
+    };
 
     return (
         <div className='flex justify-center items-center h-screen'>
@@ -69,7 +88,9 @@ const Login = () => {
                         <input className='btn w-full max-w-xs text-white' type="submit" value='Login' />
                     </form>
                     <div class="divider">OR</div>
-                    <button class="btn btn-outline">Continue With Google</button>
+                    <button
+                        onClick={() => signInWithGoogle()}
+                        class="btn btn-outline">Continue With Google</button>
                 </div>
             </div>
         </div>
