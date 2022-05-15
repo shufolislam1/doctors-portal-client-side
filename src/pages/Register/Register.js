@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../Loading/Loading';
 
 
 const Register = () => {
@@ -25,6 +26,9 @@ const Register = () => {
         await updateProfile({ displayName: data.name });
         navigate('/appoinment')
     };
+    if( loading || gLoading) {
+        return <Loading></Loading>
+    }
     return (
         <div className='flex justify-center items-center h-screen'>
             <div class="card bg-base-100 shadow-xl">

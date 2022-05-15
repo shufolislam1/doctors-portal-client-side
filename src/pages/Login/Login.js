@@ -2,7 +2,8 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Loading from '../Loading/Loading';
 
 const Login = () => {
 
@@ -17,6 +18,11 @@ const Login = () => {
     const [updateProfile, updating, updteError] = useUpdateProfile(auth);
     const navigate = useNavigate()
 
+    let errorMsg;
+    if(error || gError){
+        errorMsg = <p className='text-red-500'><small>{error?.message || gError?.message} </small></p>
+    }
+
     const { register, formState: { errors }, handleSubmit } = useForm();
     const onSubmit = async data => {
         console.log(data)
@@ -25,6 +31,15 @@ const Login = () => {
         navigate('/appoinment')
     };
 
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    if(true || loading || gLoading) {
+        return <Loading></Loading>
+    }
+    if(user || gUser) {
+        navigate(from, { replace: true });
+    }
     return (
         <div className='flex justify-center items-center h-screen'>
             <div class="card bg-base-100 shadow-xl">
@@ -85,6 +100,7 @@ const Login = () => {
                                 {errors?.Password?.type === 'minLength' && <span className="label-text-alt text-red-500">{errors.Password.message}</span>}
                             </label>
                         </div>
+                        {errorMsg}
                         <input className='btn w-full max-w-xs text-white' type="submit" value='Login' />
                     </form>
                     <div class="divider">OR</div>
