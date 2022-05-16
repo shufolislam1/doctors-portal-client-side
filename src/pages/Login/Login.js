@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 
 const Login = () => {
@@ -19,7 +19,7 @@ const Login = () => {
     const navigate = useNavigate()
 
     let errorMsg;
-    if(error || gError){
+    if (error || gError) {
         errorMsg = <p className='text-red-500'><small>{error?.message || gError?.message} </small></p>
     }
 
@@ -27,22 +27,22 @@ const Login = () => {
     const onSubmit = async data => {
         console.log(data)
         await signInWithEmailAndPassword(data.email, data.Password)
-        await updateProfile({ displayName:data.name });
-        navigate('/appoinment')
+        await updateProfile({ displayName: data.name });
+        navigate('/appoinment2')
     };
 
     const location = useLocation();
     let from = location.state?.from?.pathname || "/";
 
-    if(true || loading || gLoading) {
+    if (loading || gLoading) {
         return <Loading></Loading>
     }
-    if(user || gUser) {
+    if (user || gUser) {
         navigate(from, { replace: true });
     }
     return (
         <div className='flex justify-center items-center h-screen'>
-            <div class="card bg-base-100 shadow-xl">
+            <div  class="card bg-base-100 shadow-xl">
                 <div class="card-body">
                     <h2 class="mx-auto text-3xl font-bold">Login</h2>
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -52,8 +52,8 @@ const Login = () => {
                             </label>
                             <input
                                 type='email'
-                                placeholder='email'
-                                class="input input-bordered w-full max-w-xs"
+                                placeholder='Your Email'
+                                class="input input-bordered w-full"
                                 {...register("email",
                                     {
                                         pattern: {
@@ -79,7 +79,7 @@ const Login = () => {
                             </label>
                             <input
                                 type='password'
-                                placeholder='Password'
+                                placeholder='Your Password'
                                 class="input input-bordered w-full max-w-xs"
                                 {...register("Password",
                                     {
@@ -103,6 +103,7 @@ const Login = () => {
                         {errorMsg}
                         <input className='btn w-full max-w-xs text-white' type="submit" value='Login' />
                     </form>
+                    <p><small>New to doctors portal? <Link className='text-primary' to="/register">Please register</Link></small></p>
                     <div class="divider">OR</div>
                     <button
                         onClick={() => signInWithGoogle()}

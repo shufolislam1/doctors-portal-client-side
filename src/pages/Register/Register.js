@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 
 
@@ -16,7 +16,7 @@ const Register = () => {
     ] = useSignInWithEmailAndPassword(auth);
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-    const [updateProfile, updating, updteError] = useUpdateProfile(auth);
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
     const navigate = useNavigate()
 
     const { register, formState: { errors }, handleSubmit } = useForm();
@@ -24,24 +24,47 @@ const Register = () => {
         console.log(data)
         await signInWithEmailAndPassword(data.email, data.Password)
         await updateProfile({ displayName: data.name });
-        navigate('/appoinment')
+        navigate('/appoinment2')
     };
-    if( loading || gLoading) {
+    if (loading || gLoading) {
         return <Loading></Loading>
+    }
+    let signInError;
+    if (error || gError || updateError) {
+        signInError = <p className='text-red-500'><small>{error?.message || gError?.message || updateError?.message}</small></p>
     }
     return (
         <div className='flex justify-center items-center h-screen'>
             <div class="card bg-base-100 shadow-xl">
                 <div class="card-body">
-                    <h2 class="mx-auto text-3xl font-bold">Login</h2>
+                    <h2 class="mx-auto text-3xl font-bold">Register</h2>
                     <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Your Name"
+                                className="input input-bordered w-full max-w-xs"
+                                {...register("name", {
+                                    required: {
+                                        value: true,
+                                        message: 'Name is Required'
+                                    }
+                                })}
+                            />
+                            <label className="label">
+                                {errors.name?.type === 'required' && <span className="label-text-alt text-red-500">{errors.name.message}</span>}
+                            </label>
+                        </div>
                         <div className='form-control w-full max-w-xs'>
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
                             <input
                                 type='email'
-                                placeholder='email'
+                                placeholder='Your Email'
                                 class="input input-bordered w-full max-w-xs"
                                 {...register("email",
                                     {
@@ -68,7 +91,7 @@ const Register = () => {
                             </label>
                             <input
                                 type='password'
-                                placeholder='Password'
+                                placeholder='Your Password'
                                 class="input input-bordered w-full max-w-xs"
                                 {...register("Password",
                                     {
@@ -89,8 +112,11 @@ const Register = () => {
                                 {errors?.Password?.type === 'minLength' && <span className="label-text-alt text-red-500">{errors.Password.message}</span>}
                             </label>
                         </div>
-                        <input className='btn w-full max-w-xs text-white' type="submit" value='Login' />
+
+                        {signInError}
+                        <input className='btn w-full max-w-xs text-white' type="submit" value='Register' />
                     </form>
+                    <p><small>Already have an account? <Link className='text-primary' to="/login">Please login</Link></small></p>
                     <div class="divider">OR</div>
                     <button
                         onClick={() => signInWithGoogle()}

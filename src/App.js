@@ -18,11 +18,7 @@ function App() {
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/home' element={<Home></Home>}></Route>
         <Route path='/about' element={<About></About>}></Route>
-        <Route path='/appoinment2' element={
-          <RequireAuth>
-            <Appoinment2></Appoinment2>
-          </RequireAuth>}>
-        </Route>
+        <Route path='/appoinment2' element={<RequireAuth><Appoinment2></Appoinment2></RequireAuth>}></Route>
         <Route path='/reviews' element={<Reviews></Reviews>}></Route>
         <Route path='/contactUs' element={<ContactUs></ContactUs>}></Route>
         <Route path='/register' element={<Register></Register>}></Route>
